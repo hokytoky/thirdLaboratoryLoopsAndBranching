@@ -10,44 +10,36 @@
 using namespace std;
 
 int main() {
-    const double reynoldsBorder = 50.0;
-    const double firstCoefficient = 25.0;
-    const double firstExponent = 0.75;
-    const double secondCoefficient = 4.0;
-    const double secondExponent = 0.3;
-    const double millimetersInCentimeter = 10.0;
-    const int speedCount = 5;
+  double diameterMillimeters;
+  double viscosity;
+  int speedCount;
+  double speed;
+  double reynoldsNumber;
+  double dragCoefficient;
+  int speedIndex;
 
-    double diameter;
-    double viscosity;
-    double speedList[speedCount];
-    double reynoldsNumber;
-    double dragCoefficient;
-    int speedIndex;
+  cout << "Enter sphere diameter dC (mm): ";
+  cin >> diameterMillimeters;
 
-    cout << "Enter sphere diameter dC (mm): ";
-    cin >> diameter;
-    cout << "Enter viscosity v (cm^2/s): ";
-    cin >> viscosity;
-    for (speedIndex = 0; speedIndex < speedCount; ++speedIndex) {
-        cout << "Enter speed w number " << speedIndex + 1 << " (cm/s): ";
-        cin >> speedList[speedIndex];
+  cout << "Enter viscosity v (cm^2/s): ";
+  cin >> viscosity;
+
+  cout << "Enter number of speeds: ";
+  cin >> speedCount;
+
+  for (speedIndex = 0; speedIndex < speedCount; ++speedIndex) { 
+    cout << "\nEnter speed w number " << speedIndex + 1 << " (cm/s): ";
+    cin >> speed;
+
+    reynoldsNumber = speed * diameterMillimeters / 10.0 / viscosity;
+    if (reynoldsNumber < 50.0) {
+      dragCoefficient = 25.0 / pow(reynoldsNumber, 0.75);
+    } else {
+      dragCoefficient = 4.0 / pow(reynoldsNumber, 0.3);
     }
 
-    diameter = diameter / millimetersInCentimeter;
+    cout << "w = " << speed << " cm/s, C = " << dragCoefficient << ", Re = " << reynoldsNumber;
+  }
 
-    cout << "w (cm/s)\tC\t\tRe";
-
-    for (speedIndex = 0; speedIndex < speedCount; ++speedIndex) {
-        reynoldsNumber = speedList[speedIndex] * diameter / viscosity;
-        if (reynoldsNumber < reynoldsBorder) {
-            dragCoefficient = firstCoefficient / pow(reynoldsNumber, firstExponent);
-        }
-        else {
-            dragCoefficient = secondCoefficient / pow(reynoldsNumber, secondExponent);
-        }
-        cout << "\n" << speedList[speedIndex] << "\t\t" << dragCoefficient << "\t\t" << reynoldsNumber;
-    }
-
-    return 0;
+  return 0;
 }
